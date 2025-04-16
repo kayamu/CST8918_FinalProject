@@ -1,0 +1,22 @@
+# Ignore Terraform state and crash files
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# Ignore sensitive or local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore plan output
+*.tfplan
+
+# Ignore AWS CLI credentials (if present in home)
+.aws/credentials
+.aws/config
+
+aws/
