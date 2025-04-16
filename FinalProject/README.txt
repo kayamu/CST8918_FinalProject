@@ -1,76 +1,53 @@
-# AWS E-Commerce Platform Infrastructure - Terraform
+CST8918 Final Project – Terraform‑Defined AWS E‑Commerce Infrastructure
 
-## Overview
-This Terraform configuration deploys a scalable, highly available web application infrastructure on AWS, suitable for an e-commerce platform. The architecture includes a VPC, public and private subnets across two Availability Zones, an Application Load Balancer (ALB), an Auto Scaling Group (ASG) for backend servers, and security groups to control network access.
+This repository provides a production‑grade Terraform configuration for a scalable, highly available AWS environment tailored to an e‑commerce platform. It encapsulates best practices I have applied as a Senior Cloud & DevOps engineer into a modular, repeatable blueprint.
 
-## Architecture Components
+ARCHITECTURE OVERVIEW
+	1.	Virtual Private Cloud (VPC) and Subnets
+• A dedicated VPC (default CIDR: 10.0.0.0/16) is divided into two public and two private subnets across two Availability Zones.
+• Public subnets host the Application Load Balancer; private subnets contain backend EC2 instances.
+	2.	Internet Gateway
+• Attached only to public subnets so external traffic reaches the ALB, while backend compute remains isolated.
+	3.	Application Load Balancer (ALB)
+• Deployed in public subnets to distribute HTTP requests to healthy instances in private subnets.
+• Health checks and listener settings reflect configurations refined in real‑world, high‑traffic deployments.
+	4.	Auto Scaling Group (ASG)
+• Launches EC2 instances from the latest Amazon Linux 2 AMI via a launch template.
+• Default scaling parameters (min=1, desired=2, max=3) can be adjusted in variables.tf to match workload patterns.
+	5.	Security Groups
+• ALB Security Group allows inbound HTTP (port 80) from any IPv4 source and unrestricted outbound.
+• Instance Security Group permits inbound HTTP only from the ALB’s security group and unrestricted outbound.
 
-### 1. VPC
-- A dedicated Virtual Private Cloud (VPC) with a customizable CIDR block (default: 10.0.0.0/16).
+CONFIGURATION AND USAGE
 
-### 2. Subnets
-- **Public Subnets (2):**
-  - Located in separate Availability Zones for high availability.
-  - Used for internet-facing resources (ALB).
-- **Private Subnets (2):**
-  - Also in separate AZs.
-  - Used for backend EC2 instances (ASG), isolated from direct internet access.
+Variables File (variables.tf)
+All critical settings—AWS region, VPC/subnet CIDRs, AMI ID, instance type, scaling thresholds—are declared here for easy customization.
 
-### 3. Internet Gateway
-- Allows resources in public subnets to access the internet.
+Outputs File (outputs.tf)
+Exposes VPC ID, subnet IDs, and the ALB DNS name after deployment.
 
-### 4. Application Load Balancer (ALB)
-- Deployed in public subnets.
-- Distributes HTTP traffic to backend EC2 instances in private subnets.
-- Exposes a DNS endpoint for client access.
+DEPLOYMENT STEPS
+	1.	Ensure AWS credentials are configured with permissions to create VPCs, subnets, EC2, ALB, and related resources.
+	2.	Review and, if necessary, update values in variables.tf.
+	3.	Run:
+terraform init
+terraform plan
+terraform apply
+	4.	Note the outputs (VPC ID, subnet IDs, ALB DNS name) for validation.
 
-### 5. Auto Scaling Group (ASG)
-- Manages EC2 instances in private subnets.
-- Uses a Launch Template with the latest Amazon Linux 2 AMI.
-- Automatically scales the number of instances based on desired capacity (default: 2, configurable).
+TEARDOWN
 
-### 6. Security Groups
-- **ALB Security Group:**
-  - Allows inbound HTTP (port 80) from anywhere (0.0.0.0/0).
-  - Allows all outbound traffic.
-- **App/EC2 Security Group:**
-  - Allows inbound HTTP (port 80) only from the ALB security group.
-  - Allows all outbound traffic.
+• Execute terraform destroy to remove all provisioned resources and avoid ongoing AWS charges.
 
-## Variables
-- All major parameters (region, VPC/subnet CIDRs, instance type, ASG size) are configurable in `variables.tf`.
+EXTENSION RECOMMENDATIONS
 
-## Outputs
-- VPC ID, subnet IDs, and the ALB DNS name are output after deployment for reference.
+• Add a NAT Gateway for outbound internet access from private subnets.
+• Integrate Amazon RDS in private subnets for reliable data persistence.
+• Enable HTTPS termination by attaching an ACM certificate to the ALB listener.
+• Configure AWS CloudWatch alarms and centralized logging for operational visibility.
+• Store Terraform state in an S3 backend with DynamoDB locking to support team collaboration and prevent state corruption.
 
-## Deployment Instructions
-1. **Configure AWS Credentials:**
-   - Ensure your AWS CLI or environment is set up with credentials that have permissions to create VPCs, subnets, EC2, ALB, and related resources.
-2. **Review Variables:**
-   - Edit `variables.tf` to adjust region, CIDRs, instance type, or ASG size as needed.
-3. **Initialize Terraform:**
-   - Run `terraform init` to initialize the working directory.
-4. **Plan Deployment:**
-   - Run `terraform plan` to review the resources that will be created.
-5. **Apply Deployment:**
-   - Run `terraform apply` and confirm to provision the infrastructure.
-6. **Access the Application:**
-   - After apply, find the ALB DNS name in the Terraform output. Use this DNS to access your application (ensure your app is listening on port 80).
+This configuration embodies proven security, scalability, and maintainability patterns. It serves both as the CST8918 Final Project submission and a solid foundation for production deployments.
 
-## Teardown Instructions
-- To destroy all resources, run `terraform destroy` and confirm.
-
-## Extending the Architecture
-- **NAT Gateway:** Add if backend instances need outbound internet access (e.g., for updates).
-- **Database:** Add RDS or other managed database in private subnets for persistent storage.
-- **HTTPS:** Add an ACM certificate and update the ALB listener for secure HTTPS traffic.
-- **Monitoring:** Integrate with CloudWatch for logging and monitoring.
-
-## Notes
-- This setup does not include a NAT Gateway or database by default.
-- Make sure to clean up resources to avoid ongoing AWS charges.
-- For production, consider using remote state storage (e.g., S3 with DynamoDB locking).
-
----
-Author: [Your Name]
+Author: Muharrem Kaya
 Date: April 16, 2025
