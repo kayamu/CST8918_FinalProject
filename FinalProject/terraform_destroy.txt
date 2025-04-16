@@ -1,0 +1,568 @@
+@kayamu ➜ /workspaces/CST8918_FinalProject/FinalProject (main) $ terraform destroy
+data.aws_ami.amazon_linux: Reading...
+data.aws_availability_zones.available: Reading...
+aws_vpc.main: Refreshing state... [id=vpc-0d987362371963d1a]
+data.aws_availability_zones.available: Read complete after 1s [id=us-east-1]
+aws_subnet.public[1]: Refreshing state... [id=subnet-0d51e37e5cbd54941]
+aws_subnet.public[0]: Refreshing state... [id=subnet-041241737eb38d50c]
+data.aws_ami.amazon_linux: Read complete after 1s [id=ami-0a38b8c18f189761a]
+aws_internet_gateway.gw: Refreshing state... [id=igw-0e6acedce393bd6c9]
+aws_security_group.alb_sg: Refreshing state... [id=sg-06725de8adfe81a2a]
+aws_subnet.private[1]: Refreshing state... [id=subnet-0b894a53207883b54]
+aws_subnet.private[0]: Refreshing state... [id=subnet-097be1932fe184173]
+aws_lb_target_group.app_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d]
+aws_security_group.app_sg: Refreshing state... [id=sg-07df52872a5b60eac]
+aws_lb.app_lb: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7]
+aws_launch_template.app_lt: Refreshing state... [id=lt-0bdf14213a2eac9e3]
+aws_autoscaling_group.app_asg: Refreshing state... [id=terraform-20250416174700722300000003]
+aws_lb_listener.app_listener: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:listener/app/cst8918-app-lb/1a62a473231e0df7/ce719370eb9e51a7]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_group.app_asg will be destroyed
+  - resource "aws_autoscaling_group" "app_asg" {
+      - arn                              = "arn:aws:autoscaling:us-east-1:329599647793:autoScalingGroup:c46ae09c-30e7-404c-bea2-a90052605fe9:autoScalingGroupName/terraform-20250416174700722300000003" -> null
+      - availability_zones               = [
+          - "us-east-1a",
+          - "us-east-1b",
+        ] -> null
+      - capacity_rebalance               = false -> null
+      - default_cooldown                 = 300 -> null
+      - default_instance_warmup          = 0 -> null
+      - desired_capacity                 = 2 -> null
+      - enabled_metrics                  = [] -> null
+      - force_delete                     = false -> null
+      - force_delete_warm_pool           = false -> null
+      - health_check_grace_period        = 300 -> null
+      - health_check_type                = "EC2" -> null
+      - id                               = "terraform-20250416174700722300000003" -> null
+      - ignore_failed_scaling_activities = false -> null
+      - load_balancers                   = [] -> null
+      - max_instance_lifetime            = 0 -> null
+      - max_size                         = 4 -> null
+      - metrics_granularity              = "1Minute" -> null
+      - min_size                         = 1 -> null
+      - name                             = "terraform-20250416174700722300000003" -> null
+      - name_prefix                      = "terraform-" -> null
+      - predicted_capacity               = 0 -> null
+      - protect_from_scale_in            = false -> null
+      - service_linked_role_arn          = "arn:aws:iam::329599647793:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling" -> null
+      - suspended_processes              = [] -> null
+      - target_group_arns                = [
+          - "arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d",
+        ] -> null
+      - termination_policies             = [] -> null
+      - vpc_zone_identifier              = [
+          - "subnet-097be1932fe184173",
+          - "subnet-0b894a53207883b54",
+        ] -> null
+      - wait_for_capacity_timeout        = "10m" -> null
+      - warm_pool_size                   = 0 -> null
+        # (4 unchanged attributes hidden)
+
+      - availability_zone_distribution {
+          - capacity_distribution_strategy = "balanced-best-effort" -> null
+        }
+
+      - launch_template {
+          - id      = "lt-0bdf14213a2eac9e3" -> null
+          - name    = "cst8918_app-lt-20250416174655212600000001" -> null
+          - version = "$Latest" -> null
+        }
+
+      - tag {
+          - key                 = "Name" -> null
+          - propagate_at_launch = true -> null
+          - value               = "cst8918_app_asg" -> null
+        }
+
+      - traffic_source {
+          - identifier = "arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d" -> null
+          - type       = "elbv2" -> null
+        }
+    }
+
+  # aws_internet_gateway.gw will be destroyed
+  - resource "aws_internet_gateway" "gw" {
+      - arn      = "arn:aws:ec2:us-east-1:329599647793:internet-gateway/igw-0e6acedce393bd6c9" -> null
+      - id       = "igw-0e6acedce393bd6c9" -> null
+      - owner_id = "329599647793" -> null
+      - tags     = {
+          - "Name" = "cst8918_igw"
+        } -> null
+      - tags_all = {
+          - "Name" = "cst8918_igw"
+        } -> null
+      - vpc_id   = "vpc-0d987362371963d1a" -> null
+    }
+
+  # aws_launch_template.app_lt will be destroyed
+  - resource "aws_launch_template" "app_lt" {
+      - arn                                  = "arn:aws:ec2:us-east-1:329599647793:launch-template/lt-0bdf14213a2eac9e3" -> null
+      - default_version                      = 1 -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - id                                   = "lt-0bdf14213a2eac9e3" -> null
+      - image_id                             = "ami-0a38b8c18f189761a" -> null
+      - instance_type                        = "t3.micro" -> null
+      - latest_version                       = 1 -> null
+      - name                                 = "cst8918_app-lt-20250416174655212600000001" -> null
+      - name_prefix                          = "cst8918_app-lt-" -> null
+      - security_group_names                 = [] -> null
+      - tags                                 = {} -> null
+      - tags_all                             = {} -> null
+      - vpc_security_group_ids               = [
+          - "sg-07df52872a5b60eac",
+        ] -> null
+        # (7 unchanged attributes hidden)
+    }
+
+  # aws_lb.app_lb will be destroyed
+  - resource "aws_lb" "app_lb" {
+      - arn                                                          = "arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7" -> null
+      - arn_suffix                                                   = "app/cst8918-app-lb/1a62a473231e0df7" -> null
+      - client_keep_alive                                            = 3600 -> null
+      - desync_mitigation_mode                                       = "defensive" -> null
+      - dns_name                                                     = "cst8918-app-lb-11359465.us-east-1.elb.amazonaws.com" -> null
+      - drop_invalid_header_fields                                   = false -> null
+      - enable_cross_zone_load_balancing                             = true -> null
+      - enable_deletion_protection                                   = false -> null
+      - enable_http2                                                 = true -> null
+      - enable_tls_version_and_cipher_suite_headers                  = false -> null
+      - enable_waf_fail_open                                         = false -> null
+      - enable_xff_client_port                                       = false -> null
+      - enable_zonal_shift                                           = false -> null
+      - id                                                           = "arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7" -> null
+      - idle_timeout                                                 = 60 -> null
+      - internal                                                     = false -> null
+      - ip_address_type                                              = "ipv4" -> null
+      - load_balancer_type                                           = "application" -> null
+      - name                                                         = "cst8918-app-lb" -> null
+      - preserve_host_header                                         = false -> null
+      - security_groups                                              = [
+          - "sg-06725de8adfe81a2a",
+        ] -> null
+      - subnets                                                      = [
+          - "subnet-041241737eb38d50c",
+          - "subnet-0d51e37e5cbd54941",
+        ] -> null
+      - tags                                                         = {} -> null
+      - tags_all                                                     = {} -> null
+      - vpc_id                                                       = "vpc-0d987362371963d1a" -> null
+      - xff_header_processing_mode                                   = "append" -> null
+      - zone_id                                                      = "Z35SXDOTRQ7X7K" -> null
+        # (3 unchanged attributes hidden)
+
+      - access_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - connection_logs {
+          - enabled = false -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - subnet_mapping {
+          - subnet_id            = "subnet-041241737eb38d50c" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - subnet_mapping {
+          - subnet_id            = "subnet-0d51e37e5cbd54941" -> null
+            # (4 unchanged attributes hidden)
+        }
+    }
+
+  # aws_lb_listener.app_listener will be destroyed
+  - resource "aws_lb_listener" "app_listener" {
+      - arn                                                                 = "arn:aws:elasticloadbalancing:us-east-1:329599647793:listener/app/cst8918-app-lb/1a62a473231e0df7/ce719370eb9e51a7" -> null
+      - id                                                                  = "arn:aws:elasticloadbalancing:us-east-1:329599647793:listener/app/cst8918-app-lb/1a62a473231e0df7/ce719370eb9e51a7" -> null
+      - load_balancer_arn                                                   = "arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7" -> null
+      - port                                                                = 80 -> null
+      - protocol                                                            = "HTTP" -> null
+      - routing_http_response_server_enabled                                = false -> null
+      - tags                                                                = {} -> null
+      - tags_all                                                            = {} -> null
+        # (11 unchanged attributes hidden)
+
+      - default_action {
+          - order            = 1 -> null
+          - target_group_arn = "arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d" -> null
+          - type             = "forward" -> null
+        }
+    }
+
+  # aws_lb_target_group.app_tg will be destroyed
+  - resource "aws_lb_target_group" "app_tg" {
+      - arn                                = "arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d" -> null
+      - arn_suffix                         = "targetgroup/cst8918-app-tg/66119a4dfc061a6d" -> null
+      - deregistration_delay               = "300" -> null
+      - id                                 = "arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d" -> null
+      - ip_address_type                    = "ipv4" -> null
+      - lambda_multi_value_headers_enabled = false -> null
+      - load_balancer_arns                 = [
+          - "arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7",
+        ] -> null
+      - load_balancing_algorithm_type      = "round_robin" -> null
+      - load_balancing_anomaly_mitigation  = "off" -> null
+      - load_balancing_cross_zone_enabled  = "use_load_balancer_configuration" -> null
+      - name                               = "cst8918-app-tg" -> null
+      - port                               = 80 -> null
+      - protocol                           = "HTTP" -> null
+      - protocol_version                   = "HTTP1" -> null
+      - proxy_protocol_v2                  = false -> null
+      - slow_start                         = 0 -> null
+      - tags                               = {} -> null
+      - tags_all                           = {} -> null
+      - target_type                        = "instance" -> null
+      - vpc_id                             = "vpc-0d987362371963d1a" -> null
+        # (1 unchanged attribute hidden)
+
+      - health_check {
+          - enabled             = true -> null
+          - healthy_threshold   = 5 -> null
+          - interval            = 30 -> null
+          - matcher             = "200" -> null
+          - path                = "/" -> null
+          - port                = "traffic-port" -> null
+          - protocol            = "HTTP" -> null
+          - timeout             = 5 -> null
+          - unhealthy_threshold = 2 -> null
+        }
+
+      - stickiness {
+          - cookie_duration = 86400 -> null
+          - enabled         = false -> null
+          - type            = "lb_cookie" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - target_failover {}
+
+      - target_group_health {
+          - dns_failover {
+              - minimum_healthy_targets_count      = "1" -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+          - unhealthy_state_routing {
+              - minimum_healthy_targets_count      = 1 -> null
+              - minimum_healthy_targets_percentage = "off" -> null
+            }
+        }
+
+      - target_health_state {}
+    }
+
+  # aws_security_group.alb_sg will be destroyed
+  - resource "aws_security_group" "alb_sg" {
+      - arn                    = "arn:aws:ec2:us-east-1:329599647793:security-group/sg-06725de8adfe81a2a" -> null
+      - description            = "Allow HTTP from anywhere" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-06725de8adfe81a2a" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "cst8918_alb-sg" -> null
+      - owner_id               = "329599647793" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {} -> null
+      - vpc_id                 = "vpc-0d987362371963d1a" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_security_group.app_sg will be destroyed
+  - resource "aws_security_group" "app_sg" {
+      - arn                    = "arn:aws:ec2:us-east-1:329599647793:security-group/sg-07df52872a5b60eac" -> null
+      - description            = "Allow HTTP from ALB only" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-07df52872a5b60eac" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-06725de8adfe81a2a",
+                ]
+              - self             = false
+              - to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "cst8918_app-sg" -> null
+      - owner_id               = "329599647793" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {} -> null
+      - vpc_id                 = "vpc-0d987362371963d1a" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.private[0] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:329599647793:subnet/subnet-097be1932fe184173" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.0.101.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-097be1932fe184173" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "329599647793" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "cst8918_private_subnet_1"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "cst8918_private_subnet_1"
+        } -> null
+      - vpc_id                                         = "vpc-0d987362371963d1a" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.private[1] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:329599647793:subnet/subnet-0b894a53207883b54" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.102.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0b894a53207883b54" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "329599647793" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "cst8918_private_subnet_2"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "cst8918_private_subnet_2"
+        } -> null
+      - vpc_id                                         = "vpc-0d987362371963d1a" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.public[0] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:329599647793:subnet/subnet-041241737eb38d50c" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.0.1.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-041241737eb38d50c" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "329599647793" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "cst8918_public_subnet_1"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "cst8918_public_subnet_1"
+        } -> null
+      - vpc_id                                         = "vpc-0d987362371963d1a" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.public[1] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:329599647793:subnet/subnet-0d51e37e5cbd54941" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.2.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0d51e37e5cbd54941" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "329599647793" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "cst8918_public_subnet_2"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "cst8918_public_subnet_2"
+        } -> null
+      - vpc_id                                         = "vpc-0d987362371963d1a" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_vpc.main will be destroyed
+  - resource "aws_vpc" "main" {
+      - arn                                  = "arn:aws:ec2:us-east-1:329599647793:vpc/vpc-0d987362371963d1a" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.0.0.0/16" -> null
+      - default_network_acl_id               = "acl-01c846ce7cd626bc8" -> null
+      - default_route_table_id               = "rtb-01eab4defa8df33aa" -> null
+      - default_security_group_id            = "sg-0c3dbe50ae29bb442" -> null
+      - dhcp_options_id                      = "dopt-0776708084d153961" -> null
+      - enable_dns_hostnames                 = false -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0d987362371963d1a" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-01eab4defa8df33aa" -> null
+      - owner_id                             = "329599647793" -> null
+      - tags                                 = {
+          - "Name" = "cst8918_vpc"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "cst8918_vpc"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 0 to change, 13 to destroy.
+
+Changes to Outputs:
+  - alb_dns_name       = "cst8918-app-lb-11359465.us-east-1.elb.amazonaws.com" -> null
+  - private_subnet_ids = [
+      - "subnet-097be1932fe184173",
+      - "subnet-0b894a53207883b54",
+    ] -> null
+  - public_subnet_ids  = [
+      - "subnet-041241737eb38d50c",
+      - "subnet-0d51e37e5cbd54941",
+    ] -> null
+  - vpc_id             = "vpc-0d987362371963d1a" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+aws_lb_listener.app_listener: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:listener/app/cst8918-app-lb/1a62a473231e0df7/ce719370eb9e51a7]
+aws_internet_gateway.gw: Destroying... [id=igw-0e6acedce393bd6c9]
+aws_autoscaling_group.app_asg: Destroying... [id=terraform-20250416174700722300000003]
+aws_lb_listener.app_listener: Destruction complete after 0s
+aws_lb.app_lb: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7]
+aws_internet_gateway.gw: Still destroying... [id=igw-0e6acedce393bd6c9, 10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 10s elapsed]
+aws_lb.app_lb: Still destroying... [id=arn:aws:elasticloadbalancing:us-east-1:...er/app/cst8918-app-lb/1a62a473231e0df7, 10s elapsed]
+aws_internet_gateway.gw: Destruction complete after 17s
+aws_lb.app_lb: Destruction complete after 17s
+aws_subnet.public[0]: Destroying... [id=subnet-041241737eb38d50c]
+aws_subnet.public[1]: Destroying... [id=subnet-0d51e37e5cbd54941]
+aws_subnet.public[1]: Destruction complete after 0s
+aws_subnet.public[0]: Destruction complete after 0s
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 1m50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 2m50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 3m50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 4m50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m20s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m30s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m40s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 5m50s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 6m0s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 6m10s elapsed]
+aws_autoscaling_group.app_asg: Still destroying... [id=terraform-20250416174700722300000003, 6m20s elapsed]
+aws_autoscaling_group.app_asg: Destruction complete after 6m23s
+aws_subnet.private[0]: Destroying... [id=subnet-097be1932fe184173]
+aws_lb_target_group.app_tg: Destroying... [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d]
+aws_subnet.private[1]: Destroying... [id=subnet-0b894a53207883b54]
+aws_launch_template.app_lt: Destroying... [id=lt-0bdf14213a2eac9e3]
+aws_lb_target_group.app_tg: Destruction complete after 0s
+aws_launch_template.app_lt: Destruction complete after 0s
+aws_security_group.app_sg: Destroying... [id=sg-07df52872a5b60eac]
+aws_subnet.private[1]: Destruction complete after 0s
+aws_subnet.private[0]: Destruction complete after 0s
+aws_security_group.app_sg: Destruction complete after 1s
+aws_security_group.alb_sg: Destroying... [id=sg-06725de8adfe81a2a]
+aws_security_group.alb_sg: Destruction complete after 0s
+aws_vpc.main: Destroying... [id=vpc-0d987362371963d1a]
+aws_vpc.main: Destruction complete after 1s
+
+Destroy complete! Resources: 13 destroyed.

@@ -1,0 +1,489 @@
+@kayamu ➜ /workspaces/CST8918_FinalProject/FinalProject (main) $ terraform apply
+data.aws_ami.amazon_linux: Reading...
+data.aws_availability_zones.available: Reading...
+data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+data.aws_ami.amazon_linux: Read complete after 0s [id=ami-0a38b8c18f189761a]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_group.app_asg will be created
+  + resource "aws_autoscaling_group" "app_asg" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + desired_capacity                 = 2
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = (known after apply)
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 4
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = (known after apply)
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + vpc_zone_identifier              = (known after apply)
+      + wait_for_capacity_timeout        = "10m"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = "$Latest"
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "cst8918_app_asg"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # aws_internet_gateway.gw will be created
+  + resource "aws_internet_gateway" "gw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Name" = "cst8918_igw"
+        }
+      + tags_all = {
+          + "Name" = "cst8918_igw"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_launch_template.app_lt will be created
+  + resource "aws_launch_template" "app_lt" {
+      + arn                    = (known after apply)
+      + default_version        = (known after apply)
+      + id                     = (known after apply)
+      + image_id               = "ami-0a38b8c18f189761a"
+      + instance_type          = "t3.micro"
+      + latest_version         = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "cst8918_app-lt-"
+      + tags_all               = (known after apply)
+      + vpc_security_group_ids = (known after apply)
+
+      + metadata_options (known after apply)
+    }
+
+  # aws_lb.app_lb will be created
+  + resource "aws_lb" "app_lb" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + client_keep_alive                                            = 3600
+      + desync_mitigation_mode                                       = "defensive"
+      + dns_name                                                     = (known after apply)
+      + drop_invalid_header_fields                                   = false
+      + enable_deletion_protection                                   = false
+      + enable_http2                                                 = true
+      + enable_tls_version_and_cipher_suite_headers                  = false
+      + enable_waf_fail_open                                         = false
+      + enable_xff_client_port                                       = false
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + idle_timeout                                                 = 60
+      + internal                                                     = false
+      + ip_address_type                                              = (known after apply)
+      + load_balancer_type                                           = "application"
+      + name                                                         = "cst8918-app-lb"
+      + name_prefix                                                  = (known after apply)
+      + preserve_host_header                                         = false
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = (known after apply)
+      + tags_all                                                     = (known after apply)
+      + vpc_id                                                       = (known after apply)
+      + xff_header_processing_mode                                   = "append"
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # aws_lb_listener.app_listener will be created
+  + resource "aws_lb_listener" "app_listener" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "HTTP"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags_all                                                              = (known after apply)
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # aws_lb_target_group.app_tg will be created
+  + resource "aws_lb_target_group" "app_tg" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "cst8918-app-tg"
+      + name_prefix                        = (known after apply)
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags_all                           = (known after apply)
+      + target_type                        = "instance"
+      + vpc_id                             = (known after apply)
+
+      + health_check (known after apply)
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # aws_security_group.alb_sg will be created
+  + resource "aws_security_group" "alb_sg" {
+      + arn                    = (known after apply)
+      + description            = "Allow HTTP from anywhere"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "cst8918_alb-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_security_group.app_sg will be created
+  + resource "aws_security_group" "app_sg" {
+      + arn                    = (known after apply)
+      + description            = "Allow HTTP from ALB only"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = []
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = (known after apply)
+              + self             = false
+              + to_port          = 80
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "cst8918_app-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.private[0] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.101.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "cst8918_private_subnet_1"
+        }
+      + tags_all                                       = {
+          + "Name" = "cst8918_private_subnet_1"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.private[1] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.102.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "cst8918_private_subnet_2"
+        }
+      + tags_all                                       = {
+          + "Name" = "cst8918_private_subnet_2"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.public[0] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "cst8918_public_subnet_1"
+        }
+      + tags_all                                       = {
+          + "Name" = "cst8918_public_subnet_1"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_subnet.public[1] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.2.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "cst8918_public_subnet_2"
+        }
+      + tags_all                                       = {
+          + "Name" = "cst8918_public_subnet_2"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.main will be created
+  + resource "aws_vpc" "main" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = (known after apply)
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Name" = "cst8918_vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "cst8918_vpc"
+        }
+    }
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + alb_dns_name       = (known after apply)
+  + private_subnet_ids = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + public_subnet_ids  = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + vpc_id             = (known after apply)
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_vpc.main: Creating...
+aws_vpc.main: Creation complete after 1s [id=vpc-0d987362371963d1a]
+aws_security_group.alb_sg: Creating...
+aws_subnet.public[1]: Creating...
+aws_subnet.public[0]: Creating...
+aws_subnet.private[0]: Creating...
+aws_lb_target_group.app_tg: Creating...
+aws_subnet.private[1]: Creating...
+aws_internet_gateway.gw: Creating...
+aws_internet_gateway.gw: Creation complete after 0s [id=igw-0e6acedce393bd6c9]
+aws_lb_target_group.app_tg: Creation complete after 0s [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:targetgroup/cst8918-app-tg/66119a4dfc061a6d]
+aws_subnet.private[1]: Creation complete after 0s [id=subnet-0b894a53207883b54]
+aws_subnet.private[0]: Creation complete after 2s [id=subnet-097be1932fe184173]
+aws_security_group.alb_sg: Creation complete after 3s [id=sg-06725de8adfe81a2a]
+aws_security_group.app_sg: Creating...
+aws_security_group.app_sg: Creation complete after 2s [id=sg-07df52872a5b60eac]
+aws_launch_template.app_lt: Creating...
+aws_subnet.public[1]: Still creating... [10s elapsed]
+aws_subnet.public[0]: Still creating... [10s elapsed]
+aws_launch_template.app_lt: Creation complete after 6s [id=lt-0bdf14213a2eac9e3]
+aws_autoscaling_group.app_asg: Creating...
+aws_subnet.public[1]: Creation complete after 11s [id=subnet-0d51e37e5cbd54941]
+aws_subnet.public[0]: Creation complete after 14s [id=subnet-041241737eb38d50c]
+aws_lb.app_lb: Creating...
+aws_autoscaling_group.app_asg: Still creating... [10s elapsed]
+aws_lb.app_lb: Still creating... [10s elapsed]
+aws_autoscaling_group.app_asg: Creation complete after 15s [id=terraform-20250416174700722300000003]
+aws_lb.app_lb: Still creating... [20s elapsed]
+aws_lb.app_lb: Still creating... [30s elapsed]
+aws_lb.app_lb: Still creating... [40s elapsed]
+aws_lb.app_lb: Still creating... [50s elapsed]
+aws_lb.app_lb: Still creating... [1m0s elapsed]
+aws_lb.app_lb: Still creating... [1m10s elapsed]
+aws_lb.app_lb: Still creating... [1m20s elapsed]
+aws_lb.app_lb: Still creating... [1m30s elapsed]
+aws_lb.app_lb: Still creating... [1m40s elapsed]
+aws_lb.app_lb: Still creating... [1m50s elapsed]
+aws_lb.app_lb: Still creating... [2m0s elapsed]
+aws_lb.app_lb: Still creating... [2m10s elapsed]
+aws_lb.app_lb: Still creating... [2m20s elapsed]
+aws_lb.app_lb: Still creating... [2m30s elapsed]
+aws_lb.app_lb: Still creating... [2m40s elapsed]
+aws_lb.app_lb: Still creating... [2m50s elapsed]
+aws_lb.app_lb: Still creating... [3m0s elapsed]
+aws_lb.app_lb: Still creating... [3m10s elapsed]
+aws_lb.app_lb: Still creating... [3m20s elapsed]
+aws_lb.app_lb: Creation complete after 3m21s [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:loadbalancer/app/cst8918-app-lb/1a62a473231e0df7]
+aws_lb_listener.app_listener: Creating...
+aws_lb_listener.app_listener: Creation complete after 1s [id=arn:aws:elasticloadbalancing:us-east-1:329599647793:listener/app/cst8918-app-lb/1a62a473231e0df7/ce719370eb9e51a7]
+
+Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+alb_dns_name = "cst8918-app-lb-11359465.us-east-1.elb.amazonaws.com"
+private_subnet_ids = [
+  "subnet-097be1932fe184173",
+  "subnet-0b894a53207883b54",
+]
+public_subnet_ids = [
+  "subnet-041241737eb38d50c",
+  "subnet-0d51e37e5cbd54941",
+]
+vpc_id = "vpc-0d987362371963d1a"
+@kayamu ➜ /workspaces/CST8918_FinalProject/FinalProject (main) $  
