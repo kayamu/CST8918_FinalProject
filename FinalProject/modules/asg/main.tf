@@ -2,11 +2,13 @@ variable "vpc_id" { type = string }
 variable "private_subnets" { type = list(string) }
 variable "instance_sg_id" { type = string }
 variable "alb_target_group_arn" { type = string }
+variable "instance_type" { type = string }
+variable "desired_capacity" { type = number }
 
 resource "aws_launch_template" "main" {
   name_prefix   = "asg-launch-template-"
   image_id      = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
+  instance_type = var.instance_type
   vpc_security_group_ids = [var.instance_sg_id]
   user_data = base64encode("#!/bin/bash\nyum update -y\nyum install -y httpd\nsystemctl start httpd\nsystemctl enable httpd\necho 'Hello from ASG instance' > /var/www/html/index.html\n")
 }
@@ -24,7 +26,7 @@ resource "aws_autoscaling_group" "main" {
   name                      = "main-asg"
   max_size                  = 3
   min_size                  = 1
-  desired_capacity          = 2
+  desired_capacity          = var.desired_capacity
   vpc_zone_identifier       = var.private_subnets
   launch_template {
     id      = aws_launch_template.main.id

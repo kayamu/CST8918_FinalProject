@@ -1,0 +1,23 @@
+@kayamu ➜ /workspaces/CST8918_FinalProject/FinalProject (main) $ terraform init
+Initializing the backend...
+Initializing modules...
+- alb in modules/alb
+- asg in modules/asg
+- monitoring in modules/monitoring
+- rds in modules/rds
+- s3 in modules/s3
+- security in modules/security
+- vpc in modules/vpc
+Initializing provider plugins...
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v5.94.1
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.

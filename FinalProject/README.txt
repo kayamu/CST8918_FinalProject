@@ -67,6 +67,20 @@ terraform plan
 terraform apply
 	4.	Note the outputs (VPC ID, subnet IDs, ALB DNS name) for validation.
 
+OUTPUTS (Terraform Apply)
+
+After running terraform apply, the following outputs are provided for validation and integration:
+
+- VPC ID: vpc-019bed2fbc7afa816
+- Public Subnet IDs: subnet-0922c67fbdac46895, subnet-03629f54d85f53e9a
+- Private Subnet IDs: subnet-0922f50f9b224459d, subnet-087029494d70202df
+- ALB DNS Name: main-alb-1637770781.us-east-1.elb.amazonaws.com
+- RDS Endpoint: terraform-20250416205243729300000004.c1ige4ee69n4.us-east-1.rds.amazonaws.com:3306
+- S3 Bucket Name: cst8918-finalproject
+- CloudWatch Log Group: /aws/ec2/CST8918_FinalProject
+
+You can use these outputs to connect your application, validate resource creation, or integrate with other AWS services.
+
 TEARDOWN
 
 • Execute terraform destroy to remove all provisioned resources and avoid ongoing AWS charges.

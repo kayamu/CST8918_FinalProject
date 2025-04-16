@@ -33,3 +33,13 @@ variable "desired_capacity" {
   type        = number
   default     = 2
 }
+
+variable "project_name" {
+  type = string
+}
+
+variable "db_password" {
+  description = "Password for the RDS instance."
+  type        = string
+  sensitive   = true
+}

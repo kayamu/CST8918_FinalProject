@@ -1,91 +1,28 @@
 @kayamu ➜ /workspaces/CST8918_FinalProject/FinalProject (main) $ terraform plan
-data.aws_availability_zones.available: Reading...
+var.db_password
+  Password for the RDS instance.
+
+  Enter a value: 
+
+var.project_name
+  Enter a value: CST8918_FinalProject
+
 data.aws_ami.amazon_linux: Reading...
+data.aws_availability_zones.available: Reading...
+module.vpc.data.aws_availability_zones.available: Reading...
+module.asg.data.aws_ami.amazon_linux: Reading...
 data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
-data.aws_ami.amazon_linux: Read complete after 1s [id=ami-0a38b8c18f189761a]
+module.vpc.data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+data.aws_ami.amazon_linux: Read complete after 0s [id=ami-0a38b8c18f189761a]
+module.asg.data.aws_ami.amazon_linux: Read complete after 0s [id=ami-0a38b8c18f189761a]
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
 
-  # aws_autoscaling_group.app_asg will be created
-  + resource "aws_autoscaling_group" "app_asg" {
-      + arn                              = (known after apply)
-      + availability_zones               = (known after apply)
-      + default_cooldown                 = (known after apply)
-      + desired_capacity                 = 2
-      + force_delete                     = false
-      + force_delete_warm_pool           = false
-      + health_check_grace_period        = 300
-      + health_check_type                = (known after apply)
-      + id                               = (known after apply)
-      + ignore_failed_scaling_activities = false
-      + load_balancers                   = (known after apply)
-      + max_size                         = 4
-      + metrics_granularity              = "1Minute"
-      + min_size                         = 1
-      + name                             = (known after apply)
-      + name_prefix                      = (known after apply)
-      + predicted_capacity               = (known after apply)
-      + protect_from_scale_in            = false
-      + service_linked_role_arn          = (known after apply)
-      + target_group_arns                = (known after apply)
-      + vpc_zone_identifier              = (known after apply)
-      + wait_for_capacity_timeout        = "10m"
-      + warm_pool_size                   = (known after apply)
-
-      + availability_zone_distribution (known after apply)
-
-      + launch_template {
-          + id      = (known after apply)
-          + name    = (known after apply)
-          + version = "$Latest"
-        }
-
-      + mixed_instances_policy (known after apply)
-
-      + tag {
-          + key                 = "Name"
-          + propagate_at_launch = true
-          + value               = "cst8918_app_asg"
-        }
-
-      + traffic_source (known after apply)
-    }
-
-  # aws_internet_gateway.gw will be created
-  + resource "aws_internet_gateway" "gw" {
-      + arn      = (known after apply)
-      + id       = (known after apply)
-      + owner_id = (known after apply)
-      + tags     = {
-          + "Name" = "cst8918_igw"
-        }
-      + tags_all = {
-          + "Name" = "cst8918_igw"
-        }
-      + vpc_id   = (known after apply)
-    }
-
-  # aws_launch_template.app_lt will be created
-  + resource "aws_launch_template" "app_lt" {
-      + arn                    = (known after apply)
-      + default_version        = (known after apply)
-      + id                     = (known after apply)
-      + image_id               = "ami-0a38b8c18f189761a"
-      + instance_type          = "t3.micro"
-      + latest_version         = (known after apply)
-      + name                   = (known after apply)
-      + name_prefix            = "cst8918_app-lt-"
-      + tags_all               = (known after apply)
-      + vpc_security_group_ids = (known after apply)
-
-      + metadata_options (known after apply)
-    }
-
-  # aws_lb.app_lb will be created
-  + resource "aws_lb" "app_lb" {
+  # module.alb.aws_lb.main will be created
+  + resource "aws_lb" "main" {
       + arn                                                          = (known after apply)
       + arn_suffix                                                   = (known after apply)
       + client_keep_alive                                            = 3600
@@ -104,7 +41,7 @@ Terraform will perform the following actions:
       + internal                                                     = false
       + ip_address_type                                              = (known after apply)
       + load_balancer_type                                           = "application"
-      + name                                                         = "cst8918-app-lb"
+      + name                                                         = "main-alb"
       + name_prefix                                                  = (known after apply)
       + preserve_host_header                                         = false
       + security_groups                                              = (known after apply)
@@ -117,8 +54,8 @@ Terraform will perform the following actions:
       + subnet_mapping (known after apply)
     }
 
-  # aws_lb_listener.app_listener will be created
-  + resource "aws_lb_listener" "app_listener" {
+  # module.alb.aws_lb_listener.main will be created
+  + resource "aws_lb_listener" "main" {
       + arn                                                                   = (known after apply)
       + id                                                                    = (known after apply)
       + load_balancer_arn                                                     = (known after apply)
@@ -156,8 +93,8 @@ Terraform will perform the following actions:
       + mutual_authentication (known after apply)
     }
 
-  # aws_lb_target_group.app_tg will be created
-  + resource "aws_lb_target_group" "app_tg" {
+  # module.alb.aws_lb_target_group.main will be created
+  + resource "aws_lb_target_group" "main" {
       + arn                                = (known after apply)
       + arn_suffix                         = (known after apply)
       + connection_termination             = (known after apply)
@@ -169,7 +106,7 @@ Terraform will perform the following actions:
       + load_balancing_algorithm_type      = (known after apply)
       + load_balancing_anomaly_mitigation  = (known after apply)
       + load_balancing_cross_zone_enabled  = (known after apply)
-      + name                               = "cst8918-app-tg"
+      + name                               = "main-tg"
       + name_prefix                        = (known after apply)
       + port                               = 80
       + preserve_client_ip                 = (known after apply)
@@ -192,10 +129,218 @@ Terraform will perform the following actions:
       + target_health_state (known after apply)
     }
 
-  # aws_security_group.alb_sg will be created
-  + resource "aws_security_group" "alb_sg" {
+  # module.asg.aws_autoscaling_group.main will be created
+  + resource "aws_autoscaling_group" "main" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + desired_capacity                 = 2
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 3
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "main-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + vpc_zone_identifier              = (known after apply)
+      + wait_for_capacity_timeout        = "10m"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = "$Latest"
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + traffic_source (known after apply)
+    }
+
+  # module.asg.aws_launch_template.main will be created
+  + resource "aws_launch_template" "main" {
       + arn                    = (known after apply)
-      + description            = "Allow HTTP from anywhere"
+      + default_version        = (known after apply)
+      + id                     = (known after apply)
+      + image_id               = "ami-0a38b8c18f189761a"
+      + instance_type          = "t3.micro"
+      + latest_version         = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "asg-launch-template-"
+      + tags_all               = (known after apply)
+      + user_data              = "IyEvYmluL2Jhc2gKeXVtIHVwZGF0ZSAteQp5dW0gaW5zdGFsbCAteSBodHRwZApzeXN0ZW1jdGwgc3RhcnQgaHR0cGQKc3lzdGVtY3RsIGVuYWJsZSBodHRwZAplY2hvICdIZWxsbyBmcm9tIEFTRyBpbnN0YW5jZScgPiAvdmFyL3d3dy9odG1sL2luZGV4Lmh0bWwK"
+      + vpc_security_group_ids = (known after apply)
+
+      + metadata_options (known after apply)
+    }
+
+  # module.monitoring.aws_cloudwatch_log_group.app will be created
+  + resource "aws_cloudwatch_log_group" "app" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + log_group_class   = (known after apply)
+      + name              = "/aws/ec2/CST8918_FinalProject"
+      + name_prefix       = (known after apply)
+      + retention_in_days = 7
+      + skip_destroy      = false
+      + tags_all          = (known after apply)
+    }
+
+  # module.monitoring.aws_cloudwatch_metric_alarm.cpu_high will be created
+  + resource "aws_cloudwatch_metric_alarm" "cpu_high" {
+      + actions_enabled                       = true
+      + alarm_description                     = "This metric monitors high CPU utilization"
+      + alarm_name                            = "CST8918_FinalProject-high-cpu"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "main-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 2
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/EC2"
+      + period                                = 120
+      + statistic                             = "Average"
+      + tags_all                              = (known after apply)
+      + threshold                             = 70
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.rds.aws_db_instance.main will be created
+  + resource "aws_db_instance" "main" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = (known after apply)
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = (known after apply)
+      + db_subnet_group_name                  = "main-db-subnet-group"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + domain_fqdn                           = (known after apply)
+      + endpoint                              = (known after apply)
+      + engine                                = "mysql"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = "8.0"
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = (known after apply)
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t3.micro"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = (known after apply)
+      + tags_all                              = (known after apply)
+      + timezone                              = (known after apply)
+      + username                              = "admin"
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # module.rds.aws_db_subnet_group.main will be created
+  + resource "aws_db_subnet_group" "main" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "main-db-subnet-group"
+      + name_prefix             = (known after apply)
+      + subnet_ids              = (known after apply)
+      + supported_network_types = (known after apply)
+      + tags_all                = (known after apply)
+      + vpc_id                  = (known after apply)
+    }
+
+  # module.s3.aws_s3_bucket.app_data will be created
+  + resource "aws_s3_bucket" "app_data" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "cst8918-finalproject"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = true
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = (known after apply)
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # module.security.aws_security_group.alb will be created
+  + resource "aws_security_group" "alb" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
       + egress                 = [
           + {
               + cidr_blocks      = [
@@ -227,7 +372,7 @@ Terraform will perform the following actions:
                 # (1 unchanged attribute hidden)
             },
         ]
-      + name                   = "cst8918_alb-sg"
+      + name                   = "alb-sg"
       + name_prefix            = (known after apply)
       + owner_id               = (known after apply)
       + revoke_rules_on_delete = false
@@ -235,10 +380,51 @@ Terraform will perform the following actions:
       + vpc_id                 = (known after apply)
     }
 
-  # aws_security_group.app_sg will be created
-  + resource "aws_security_group" "app_sg" {
+  # module.security.aws_security_group.db will be created
+  + resource "aws_security_group" "db" {
       + arn                    = (known after apply)
-      + description            = "Allow HTTP from ALB only"
+      + description            = "Managed by Terraform"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = []
+              + from_port        = 3306
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = (known after apply)
+              + self             = false
+              + to_port          = 3306
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "db-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags_all               = (known after apply)
+      + vpc_id                 = (known after apply)
+    }
+
+  # module.security.aws_security_group.instance will be created
+  + resource "aws_security_group" "instance" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
       + egress                 = [
           + {
               + cidr_blocks      = [
@@ -268,7 +454,7 @@ Terraform will perform the following actions:
                 # (1 unchanged attribute hidden)
             },
         ]
-      + name                   = "cst8918_app-sg"
+      + name                   = "instance-sg"
       + name_prefix            = (known after apply)
       + owner_id               = (known after apply)
       + revoke_rules_on_delete = false
@@ -276,7 +462,47 @@ Terraform will perform the following actions:
       + vpc_id                 = (known after apply)
     }
 
-  # aws_subnet.private[0] will be created
+  # module.vpc.aws_internet_gateway.main will be created
+  + resource "aws_internet_gateway" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags_all = (known after apply)
+      + vpc_id   = (known after apply)
+    }
+
+  # module.vpc.aws_route_table.public will be created
+  + resource "aws_route_table" "public" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags_all         = (known after apply)
+      + vpc_id           = (known after apply)
+    }
+
+  # module.vpc.aws_route_table_association.public[0] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.vpc.aws_route_table_association.public[1] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.vpc.aws_subnet.private[0] will be created
   + resource "aws_subnet" "private" {
       + arn                                            = (known after apply)
       + assign_ipv6_address_on_creation                = false
@@ -292,16 +518,11 @@ Terraform will perform the following actions:
       + map_public_ip_on_launch                        = false
       + owner_id                                       = (known after apply)
       + private_dns_hostname_type_on_launch            = (known after apply)
-      + tags                                           = {
-          + "Name" = "cst8918_private_subnet_1"
-        }
-      + tags_all                                       = {
-          + "Name" = "cst8918_private_subnet_1"
-        }
+      + tags_all                                       = (known after apply)
       + vpc_id                                         = (known after apply)
     }
 
-  # aws_subnet.private[1] will be created
+  # module.vpc.aws_subnet.private[1] will be created
   + resource "aws_subnet" "private" {
       + arn                                            = (known after apply)
       + assign_ipv6_address_on_creation                = false
@@ -317,16 +538,11 @@ Terraform will perform the following actions:
       + map_public_ip_on_launch                        = false
       + owner_id                                       = (known after apply)
       + private_dns_hostname_type_on_launch            = (known after apply)
-      + tags                                           = {
-          + "Name" = "cst8918_private_subnet_2"
-        }
-      + tags_all                                       = {
-          + "Name" = "cst8918_private_subnet_2"
-        }
+      + tags_all                                       = (known after apply)
       + vpc_id                                         = (known after apply)
     }
 
-  # aws_subnet.public[0] will be created
+  # module.vpc.aws_subnet.public[0] will be created
   + resource "aws_subnet" "public" {
       + arn                                            = (known after apply)
       + assign_ipv6_address_on_creation                = false
@@ -342,16 +558,11 @@ Terraform will perform the following actions:
       + map_public_ip_on_launch                        = true
       + owner_id                                       = (known after apply)
       + private_dns_hostname_type_on_launch            = (known after apply)
-      + tags                                           = {
-          + "Name" = "cst8918_public_subnet_1"
-        }
-      + tags_all                                       = {
-          + "Name" = "cst8918_public_subnet_1"
-        }
+      + tags_all                                       = (known after apply)
       + vpc_id                                         = (known after apply)
     }
 
-  # aws_subnet.public[1] will be created
+  # module.vpc.aws_subnet.public[1] will be created
   + resource "aws_subnet" "public" {
       + arn                                            = (known after apply)
       + assign_ipv6_address_on_creation                = false
@@ -367,16 +578,11 @@ Terraform will perform the following actions:
       + map_public_ip_on_launch                        = true
       + owner_id                                       = (known after apply)
       + private_dns_hostname_type_on_launch            = (known after apply)
-      + tags                                           = {
-          + "Name" = "cst8918_public_subnet_2"
-        }
-      + tags_all                                       = {
-          + "Name" = "cst8918_public_subnet_2"
-        }
+      + tags_all                                       = (known after apply)
       + vpc_id                                         = (known after apply)
     }
 
-  # aws_vpc.main will be created
+  # module.vpc.aws_vpc.main will be created
   + resource "aws_vpc" "main" {
       + arn                                  = (known after apply)
       + cidr_block                           = "10.0.0.0/16"
@@ -394,28 +600,26 @@ Terraform will perform the following actions:
       + ipv6_cidr_block_network_border_group = (known after apply)
       + main_route_table_id                  = (known after apply)
       + owner_id                             = (known after apply)
-      + tags                                 = {
-          + "Name" = "cst8918_vpc"
-        }
-      + tags_all                             = {
-          + "Name" = "cst8918_vpc"
-        }
+      + tags_all                             = (known after apply)
     }
 
-Plan: 13 to add, 0 to change, 0 to destroy.
+Plan: 22 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-  + alb_dns_name       = (known after apply)
-  + private_subnet_ids = [
+  + alb_dns_name         = (known after apply)
+  + cloudwatch_log_group = "/aws/ec2/CST8918_FinalProject"
+  + private_subnet_ids   = [
       + (known after apply),
       + (known after apply),
     ]
-  + public_subnet_ids  = [
+  + public_subnet_ids    = [
       + (known after apply),
       + (known after apply),
     ]
-  + vpc_id             = (known after apply)
+  + rds_endpoint         = (known after apply)
+  + s3_bucket_name       = "cst8918-finalproject"
+  + vpc_id               = (known after apply)
 
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.

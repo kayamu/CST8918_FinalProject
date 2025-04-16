@@ -1,27 +1,27 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value = module.vpc.vpc_id
 }
 
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value = module.vpc.public_subnets
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  value = module.vpc.private_subnets
 }
 
 output "alb_dns_name" {
-  value = aws_lb.app_lb.dns_name
+  value = module.alb.alb_dns_name
 }
 
 output "rds_endpoint" {
-  value = aws_db_instance.main.endpoint
+  value = module.rds.rds_endpoint
 }
 
 output "s3_bucket_name" {
-  value = aws_s3_bucket.app_data.bucket
+  value = module.s3.s3_bucket_name
 }
 
 output "cloudwatch_log_group" {
-  value = aws_cloudwatch_log_group.app.name
+  value = module.monitoring.cloudwatch_log_group
 }

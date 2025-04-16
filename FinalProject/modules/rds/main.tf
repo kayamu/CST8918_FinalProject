@@ -1,6 +1,7 @@
 variable "vpc_id" { type = string }
 variable "private_subnets" { type = list(string) }
 variable "db_sg_id" { type = string }
+variable "db_password" { type = string }
 
 resource "aws_db_subnet_group" "main" {
   name       = "main-db-subnet-group"
@@ -12,9 +13,8 @@ resource "aws_db_instance" "main" {
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
-  name                 = "ecommerce"
   username             = "admin"
-  password             = "ChangeMe123!"
+  password             = var.db_password
   db_subnet_group_name = aws_db_subnet_group.main.name
   vpc_security_group_ids = [var.db_sg_id]
   skip_final_snapshot  = true

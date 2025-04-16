@@ -1,6 +1,8 @@
 module "vpc" {
   source   = "./modules/vpc"
   vpc_cidr = var.vpc_cidr
+  public_subnet_cidrs = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
 }
 
 module "security" {
@@ -21,6 +23,8 @@ module "asg" {
   private_subnets       = module.vpc.private_subnets
   instance_sg_id        = module.security.instance_sg_id
   alb_target_group_arn  = module.alb.target_group_arn
+  instance_type         = var.instance_type
+  desired_capacity      = var.desired_capacity
 }
 
 module "rds" {
@@ -28,6 +32,7 @@ module "rds" {
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
   db_sg_id        = module.security.db_sg_id
+  db_password     = var.db_password
 }
 
 module "s3" {
