@@ -18,6 +18,38 @@ ARCHITECTURE OVERVIEW
 • ALB Security Group allows inbound HTTP (port 80) from any IPv4 source and unrestricted outbound.
 • Instance Security Group permits inbound HTTP only from the ALB’s security group and unrestricted outbound.
 
+DATABASE TIER
+
+• Amazon RDS (MySQL) instance is provisioned in private subnets for secure, persistent data storage.
+• Database security group only allows inbound MySQL traffic from EC2 instances in the application security group.
+
+STORAGE
+
+• An S3 bucket is created for storing application data and logs. The bucket name is output after deployment.
+
+MONITORING & LOGGING
+
+• CloudWatch Log Group is provisioned for EC2/application logs.
+• A CloudWatch alarm is set up to monitor high CPU utilization in the Auto Scaling Group.
+
+MODULAR DESIGN
+
+This project uses a modular Terraform structure. Each major AWS component (VPC, Security, ALB, ASG, RDS, S3, Monitoring) is defined in its own module under the `modules/` directory. This approach improves code reusability, clarity, and maintainability. You can customize or reuse individual modules for other projects easily.
+
+MODULAR STRUCTURE DETAILS
+
+The infrastructure is split into the following modules under the `modules/` directory:
+
+- **vpc/**: Creates the VPC and both public/private subnets.
+- **security/**: Defines all security groups (ALB, EC2, RDS).
+- **alb/**: Provisions the Application Load Balancer, target group, and listener.
+- **asg/**: Sets up the Auto Scaling Group and Launch Template for EC2 instances.
+- **rds/**: Deploys an Amazon RDS (MySQL) instance in private subnets.
+- **s3/**: Creates an S3 bucket for application data and logs.
+- **monitoring/**: Configures CloudWatch log group and a CPU utilization alarm for the ASG.
+
+Each module is self-contained and exposes outputs to be consumed by other modules or the root configuration. This makes the infrastructure reusable and easy to maintain.
+
 CONFIGURATION AND USAGE
 
 Variables File (variables.tf)
@@ -46,6 +78,18 @@ EXTENSION RECOMMENDATIONS
 • Enable HTTPS termination by attaching an ACM certificate to the ALB listener.
 • Configure AWS CloudWatch alarms and centralized logging for operational visibility.
 • Store Terraform state in an S3 backend with DynamoDB locking to support team collaboration and prevent state corruption.
+
+ASSUMPTIONS & LIMITATIONS
+
+• The RDS password is hardcoded for demonstration; use AWS Secrets Manager for production.
+• No automated backup or multi-AZ for RDS (can be enabled for production).
+• S3 bucket access policies are not restricted for simplicity.
+• Application-level log shipping to CloudWatch is not configured by default.
+
+KNOWN ISSUES & TROUBLESHOOTING
+
+• If RDS provisioning fails, ensure your AWS account has sufficient quota and the selected instance type is available in your region.
+• For S3 bucket naming conflicts, change the project_name variable.
 
 This configuration embodies proven security, scalability, and maintainability patterns. It serves both as the CST8918 Final Project submission and a solid foundation for production deployments.
 
